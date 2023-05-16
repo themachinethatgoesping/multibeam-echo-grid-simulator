@@ -4,3 +4,12 @@ This repository contains the simulation code (python) for reproducing the result
 The program simulates multibeam water column images for virtual surveys over individual targets or target clouds and allows for testing the effects of different echo grid integration methods. (See Urban et. al 2023 for more details)
 
 Note: the repository is currently beeing setup
+
+# License
+Mozilla Public License Version 2.0 (MPL 2.0)
+
+# Installation
+Work in progress
+
+# Examples
+Work in progress

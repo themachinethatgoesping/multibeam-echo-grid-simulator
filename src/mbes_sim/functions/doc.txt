@@ -1,0 +1,21 @@
+# Done
+- beampatternfunctions.py
+- helperfunctions.py
+- pulsefunctions.py
+- navfunctions.py
+- create_bubblesfunctions.py
+- transformfunctions.py
+- create echofunctions.py
+- gridfunctions.py
+
+# Todo:
+- mbes.py
+- scattergrid.py
+- simulationfunctions.py
+- simulation.py
+
+# Todo:
+- tutorial notebooks
+    - single simulation of images
+    - simulation bubble streams
+    - simulation single bubbles
