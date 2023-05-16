@@ -1054,7 +1054,7 @@ if __name__ == '__main__':
         windowType=beam_pattern,
         idealizedBeampattern=False,
         equiDist=False,
-        motionDataPath="../m142_data/motion.csv",
+        motionDataPath="../test_data/m143_l0154_motion.csv",
 
         surveyType=t_Survey.IdealMotion,
         voxelsize=voxsize / downfactor,

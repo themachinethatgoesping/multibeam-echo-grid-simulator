@@ -440,7 +440,7 @@ class MotionData(object):
     motion data saved within a pandas object.
     The output will be the synthetic survey + the real motion
 
-    WARNING: the read function seems to be instable; the code will need some revisions if a different motion data file than the provided m142/motion.csv is used
+    WARNING: the read function seems to be instable; the code will need some revisions if a different motion data file than the provided test_data/m143_l0154_motion.csv is used
 
     Note:
         - yaw,pitch,roll are interpolated individually. This would not be 100% correct for precise geo-referencing.
@@ -771,9 +771,9 @@ if __name__ == "__main__":
     import matplotlib as mpl
 
     try:
-        navdata = MotionData(motion_data_path="../../../m142_data/motion.csv")
+        navdata = MotionData(motion_data_path="../../../test_data/m143_l0154_motion.csv")
     except:
-        navdata = MotionData(motion_data_path="./m142_data/motion.csv")
+        navdata = MotionData(motion_data_path="../test_data/m143_l0154_motion.csv")
 
     print(navdata.motion_data)
 

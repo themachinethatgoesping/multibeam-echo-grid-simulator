@@ -9,7 +9,35 @@ Note: the repository is currently beeing setup
 Mozilla Public License Version 2.0 (MPL 2.0)
 
 # Installation
-Work in progress
+Currently you cannot install this simulation as a package. To run the code you have to add the src folder to you python path. This can be done from scripts.
+
+#add mbes_sim to search path
+import sys
+sys.path.insert(0, "../src/")
+
+import mbes_sim
+
+You need the following packages with depencies from e.g. anaconda or pypi (version in brackets is the last tested versionls)
+
+- python (3.10)
+- numpy
+- scipy
+- numba
+- pandas
+- tqdm
+- plotly
+- jupyterlab
+- ipympl
+
+
+If you want to use the exact package versions that this simulation was last tested with, we recommend mambaforge (https://github.com/conda-forge/miniforge/releases/tag/23.1.0-1)
+
+open the mamba promt and create a new environment with the packages specified in package-list.txt
+
+mamba create -n mbes_sim --file package-list.txt
+#activate the environment
+mamba activate mbes_sim
+
 
 # Examples
 Work in progress
