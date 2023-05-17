@@ -21,7 +21,7 @@ Functions to create, raytrace and process water column images (WCI).
 """
 
 #parallel = True causes crash when using the function a threading work space
-RUN_PARALLEL=True
+RUN_PARALLEL=False
 
 #@jit(parallel=True,forceobj=True)
 #@njit(parallel=RUN_PARALLEL)
