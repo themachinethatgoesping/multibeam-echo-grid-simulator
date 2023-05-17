@@ -77,8 +77,8 @@ class t_Survey(IntEnum):
     RealMotion = 1 # real vessel motion from navigation data
 
     def __str__(self):
-        if self.value == IdealMotion: return 'Flat'
-        if self.value == RealMotion: return 'FromNavigation'
+        if self.value == t_Survey.IdealMotion: return 'Flat'
+        if self.value == t_Survey.RealMotion: return 'FromNavigation'
 
     @staticmethod
     def print_all():
@@ -687,7 +687,7 @@ class SimulationSetup(object):
                                 )
                                 simret['resample - ' + name] = fig
 
-                        self.SimulationResults = self.SimulationResults.append(simret, ignore_index=True)
+                        self.SimulationResults = pd.concat([self.SimulationResults,simret], ignore_index=True)
 
                     custom_progress.update()
                     custom_progress.set_postfix_str('Saving simresults')
@@ -729,7 +729,7 @@ class SimulationSetup(object):
             simulation name
         """
 
-        dir_keys = ['prefix','downfactor','resfactor','equiDist','bubbleType']
+        dir_keys = ['prefix','downfactor','resfactor','equiDist','bubbleType','windowType','surveyType','voxelsize','voxelsizeZ']
 
         dir = deepcopy(BaseDirectory) + '/'
         for k in dir_keys:
