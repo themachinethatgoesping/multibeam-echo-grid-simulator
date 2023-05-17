@@ -440,7 +440,8 @@ class MotionData(object):
     motion data saved within a pandas object.
     The output will be the synthetic survey + the real motion
 
-    WARNING: the read function seems to be instable; the code will need some revisions if a different motion data file than the provided test_data/m143_l0154_motion.csv is used
+    WARNING: the code was only tested with the motion data file than the provided test_data/m143_l0154_motion.csv
+    We will possibly find bugs when using other motion data files
 
     Note:
         - yaw,pitch,roll are interpolated individually. This would not be 100% correct for precise geo-referencing.
@@ -636,7 +637,7 @@ class MotionData(object):
 
         actual_sideward.extend(
             [
-                af * math.asin(aa - angle)
+                af * math.sin(aa - angle)
                 for af, aa in zip(actual_forward[1:], actual_angle)
             ]
         )

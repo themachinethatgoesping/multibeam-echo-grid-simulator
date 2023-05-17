@@ -687,7 +687,8 @@ class SimulationSetup(object):
                                 )
                                 simret['resample - ' + name] = fig
 
-                        self.SimulationResults = pd.concat([self.SimulationResults,simret], ignore_index=True)
+                        self.SimulationResults = pd.concat((self.SimulationResults,simret.to_frame().T), ignore_index=True)
+                        self.LastSimulationResults = simret
 
                     custom_progress.update()
                     custom_progress.set_postfix_str('Saving simresults')
