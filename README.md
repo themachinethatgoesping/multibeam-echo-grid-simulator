@@ -6,7 +6,7 @@ The program simulates multibeam water column images for virtual surveys over ind
 # License
 Mozilla Public License Version 2.0 (MPL-2.0)
 
-In simple terms: The MPL-2.0 license implements a non-viral copyleft that only affects the licensed files; but not the project that include these files. MPL-2.0 licensed files can thus be deeply integrated even in comercial, closed source projects. Further, MPL-2.0 includes an explicit clause to make it compatible with GPL (>2.0) projects. 
+In simple terms: The MPL-2.0 license implements a non-viral copyleft that only affects the licensed files; but not the project that include these files. MPL-2.0 licensed files can thus be deeply integrated even in comercial, closed source projects, as long as the file itself stays open source. Further, MPL-2.0 includes an explicit clause to make it compatible with GPL (>2.0) projects. 
 
 Note that this simplified description is not a legal advice and does not cover all aspects of the license. For this please refer to the license self
 - https://www.mozilla.org/en-US/MPL/2.0/FAQ/
