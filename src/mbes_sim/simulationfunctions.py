@@ -764,11 +764,8 @@ class SimulationSetup(object):
         Returns
         -------
         Survey
-            Survey with random x,y,z offset and (if not t_Survey.IdealMotion) modified motion data (based on exagHPR)
+            Survey  modified motion data (based on exagHPR) (if not t_Survey.IdealMotion)
         """
-        self.Survey.setRandomOffsetX(self.SimSetup['voxelsize'])
-        self.Survey.setRandomOffsetY(self.SimSetup['voxelsize'])
-        self.Survey.setRandomOffsetZ(self.SimSetup['voxelsize'])
 
         if exagHPR is None:
             exagHPR = self.SimSetup['exagHPR']

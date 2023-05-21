@@ -128,6 +128,8 @@ class Survey(object):
         fixedOffset : float, optional
             If this value is set, GridCellSize is ignored. The survey is shifted by fixedOffset, by default None
         """
+        self.pingpositions_x -= self.RandomOffsetX
+
         if fixedOffset is None:
             self.RandomOffsetX = random.uniform(-GridCellSize * 0.5, GridCellSize * 0.5)
         else:
@@ -150,6 +152,7 @@ class Survey(object):
         fixedOffset : float, optional
             If this value is set, GridCellSize is ignored. The survey is shifted by fixedOffset, by default None
         """
+        self.pingpositions_y -= self.RandomOffsetY
 
         if fixedOffset is None:
             self.RandomOffsetY = random.uniform(-GridCellSize * 0.5, GridCellSize * 0.5)
@@ -173,6 +176,7 @@ class Survey(object):
         fixedOffset : float, optional
             If this value is set, GridCellSize is ignored. The survey is shifted by fixedOffset, by default None
         """
+        self.heaves += self.RandomOffsetZ
 
         if fixedOffset is None:
             self.RandomOffsetZ = random.uniform(-GridCellSize * 0.5, GridCellSize * 0.5)
