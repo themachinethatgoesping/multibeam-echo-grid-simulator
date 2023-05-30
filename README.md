@@ -32,6 +32,7 @@ You need the following packages with depencies from e.g. anaconda or pypi (versi
 - scipy
 - numba
 - pandas
+- pytables
 - tqdm
 - plotly
 - jupyterlab

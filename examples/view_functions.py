@@ -98,8 +98,6 @@ CACHED_FILES={}
 
 def open_file(file, verbose=True, cache = False, no_plots=True, hdf5=True):
     global CACHED_FILES
-    tmp_file = '/tmp/view_sim'
-    tmp_file += '.' + file.split('.')[-1]
 
     #print('in file', file)
     if no_plots:
@@ -123,7 +121,7 @@ def open_file(file, verbose=True, cache = False, no_plots=True, hdf5=True):
         #print('plt_file',plt_file)
 
         if not os.path.exists(file):
-            setup, simreturns = SIMFUN.SimulationSetup.load_simreturns(sh.copy(plt_file, tmp_file), verbose=verbose)
+            setup, simreturns = SIMFUN.SimulationSetup.load_simreturns(plt_file, verbose=verbose)
 
             plt_keys = [k for k in simreturns.keys() if 'resample' in k]
             for k in plt_keys:
@@ -135,14 +133,11 @@ def open_file(file, verbose=True, cache = False, no_plots=True, hdf5=True):
                                                    verbose=verbose,
                                                    hdf5 = hdf5)
 
-        
-    tmp_file += '.' + file.split('.')[-1]
-
 
     if file in CACHED_FILES.keys():
         setup, simreturns = CACHED_FILES[file]
     else:
-        setup, simreturns = SIMFUN.SimulationSetup.load_simreturns(sh.copy(file, tmp_file), verbose=verbose)
+        setup, simreturns = SIMFUN.SimulationSetup.load_simreturns(file, verbose=verbose)
 
         if cache:
             CACHED_FILES[file] = setup, simreturns
