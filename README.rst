@@ -10,7 +10,7 @@ The main purpose for this repository is to publish the code for reproducing the 
 
 Usage / Examples
 ================
-Please follow the :ref:`Installation` instructions bellow to create a python envornment using pip env or anaconda.
+Please follow the `Installation` instructions bellow to create a python envornment using pip env or anaconda.
 
 You will find several jupyter notebook examples in the 'examples' folder to:
 - 01 Simulate for a survey over a single target (and visualize the resuts in 3D)
@@ -64,15 +64,15 @@ You need the following packages with depencies from e.g. anaconda or pypi (versi
   - jupyterlab
   - ipympl
 
-If you want to use the exact package versions that this simulation was last tested with, we recommend :ref:`https://github.com/conda-forge/miniforge/releases/tag/23.1.0-1<mambaforge>`
+If you want to use the exact package versions that this simulation was last tested with you could use anaconda
 
 .. code-block:: python
 
-  mamba create -n mbes_sim --file package-list.txt
+  conda create -n mbes_sim --file package-list.txt
   #activate the environment
-  mamba activate mbes_sim
+  conda activate mbes_sim
   
-You can also use pip env
+pip env:
 
 .. code-block:: python
 
