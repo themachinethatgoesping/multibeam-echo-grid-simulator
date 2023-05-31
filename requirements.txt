@@ -1,0 +1,19 @@
+# This file may be used to create an environment using:
+# $ pip install -r requirements.txt
+ipympl==0.9.3
+ipywidgets==8.0.6
+jupyterlab==4.0.0
+jupyterlab_pygments==0.2.2
+jupyterlab_server==2.22.1
+jupyterlab_widgets==3.0.7
+matplotlib
+nbformat==5.8.0
+numba==0.57.0
+numpy==1.24.3
+pandas==2.0.1
+tables
+pillow==9.5.0
+plotly==5.14.1
+scipy==1.10.1
+tqdm==4.65.0
+widgetsnbextension==4.0.7
