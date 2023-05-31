@@ -91,3 +91,10 @@ Contributing / Further development / Use
 This project consists scripts created to reach results for a specific publication. While parts of the code are very well documented, other parts are not and can be more difficult to understand.
 
 If you have questions, problems using the simulation or are interested in using/further developing the simulation code for another project, please contact me: peter.urban@ugent.be 
+
+Acknowledgements / Funding
+==========================
+
+- This work was created while working for the DeepSea Monitoring Group at GEOMAR, Helmholtz Centre for Ocean Research, Kiel, Germany.
+- Last bits/comments/examples where finished while working at Ghent University, Ghent, Belgium
+(TODO: logos are missing)
