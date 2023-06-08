@@ -13,6 +13,9 @@
    :target: https://opensource.org/license/mpl-2-0/
    :alt: license: MPL-2.0
    
+.. |image-3D-example| image:: https://media.githubusercontent.com/media/themachinethatgoesping/multibeam-echo-grid-simulator/main/resources/3D-bubblestream.png
+   :alt: Example image for a 3D simulation of a bubble stream
+   
 | |badge-license|
 | |badge-doi-code| |badge-doi-paper|
 
@@ -29,11 +32,14 @@ Usage / Examples
 Please follow the `Installation` instructions bellow to create a python envornment using pip env or anaconda.
 
 You will find several jupyter notebook examples in the 'examples' folder to:
+
 - 01 Simulate for a survey over a single target (and visualize the resuts in 3D)
 - 02 Simulate for a survey over a bubble stream (and visualize the resuts in 3D)
 - 03 Simulate a single setup 10th or 100ths of times for statistical analyzis of this setup
 - 04 Batch simulate multiple survey setups
 - 05 Evaluate / plot simulation results
+
+|image-3D-example|
 
 Commenting on the examples is currently mediocre (much worse than the actual simulation code). 
 
