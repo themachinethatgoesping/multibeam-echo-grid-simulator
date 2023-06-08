@@ -18,7 +18,7 @@
    :alt: DeepSea Monitoring Group - GEOMAR
    :height: 50
    
-.. |logo-GEOMAR| image:: https://www.geomar.de/fileadmin/content/service/presse/GEOMAR-Logo/geomar_logo_neg_02_kurz.png
+.. |logo-GEOMAR| image:: https://www.geomar.de/fileadmin/_processed_/a/0/csm_geomar_logo_kurz_4c-large_e50ee49df0.jpg
    :target: https://www.geomar.de/
    :alt: GEOMAR Helholtz-Centre for ocean research Kiel
    :height: 50
