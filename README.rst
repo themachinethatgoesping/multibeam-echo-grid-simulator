@@ -1,12 +1,28 @@
 .. SPDX-FileCopyrightText: 2022 - 2023 Peter Urban, Ghent University
 ..
 .. SPDX-License-Identifier: MPL-2.0
+.. |badge-doi-code| image:: https://img.shields.io/badge/doi(code):-10.3289/SW_3_2023-informational
+   :target: https://doi.org/10.3289/SW_3_2023
+   :alt: doi(code):-10.3289/SW_3_2023-informational
+   
+.. |badge-doi-paper| image:: https://img.shields.io/badge/doi(paper):-10.1002/lom3.10552-informational
+   :target: https://doi.org/10.1002/lom3.10552
+   :alt: doi(paper):-10.1002/lom3.10552-informational
+   
+.. |badge-license| image:: https://img.shields.io/badge/license:-MPL--2.0-green
+   :target: https://opensource.org/license/mpl-2-0/
+   :alt: license: MPL-2.0
+   
+| |badge-license|
+| |badge-doi-code| |badge-doi-paper|
 
 Welcome to the multibeam echo grid simulator!
 =============================================
-**multibeam echo grid simulator** (short: mbes_sim) simulates multibeam water column images for virtual surveys over individual targets or target clouds and allows for testing the effects of different echo grid integration methods. (See Urban et. al 2023 for more details)
+**multibeam echo grid simulator** (short: mbes_sim) simulates multibeam water column images for virtual surveys over individual targets or target clouds and allows for testing the effects of different echo grid integration methods. (See `Urban et. al 2023 <https://doi.org/10.1002/lom3.10552>`_ for more details)
 
-The main purpose for this repository is to publish the code for reproducing the results of the accepted paper "Echo grid integration: A novel method for preprocessing multibeam water column data to quantify underwater gas bubble emissions." by Urban et. al. 2023 (Accepted) 
+The main purpose for this repository is to publish the code for reproducing the results of the accepted paper "Echo grid integration: A novel method for preprocessing multibeam water column data to quantify underwater gas bubble emissions." by `Urban et. al 2023 <https://doi.org/10.1002/lom3.10552>`_
+
+If you use the code from this repository in your scientific work, please consider citing both the related `paper <https://doi.org/10.1002/lom3.10552>`_ and the `code <https://doi.org/10.3289/SW_3_2023>`_.
 
 Usage / Examples
 ================
