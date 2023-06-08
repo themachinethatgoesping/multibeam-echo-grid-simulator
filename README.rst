@@ -16,17 +16,17 @@
 .. |logo-DSM| image:: https://www.geomar.de/fileadmin/content/forschen/fb2/mg/deepseamon/DSM-Logo_large_black_trans.gif
    :target: https://www.geomar.de/deepsea-monitoring
    :alt: DeepSea Monitoring Group - GEOMAR
-   :height: 40
+   :height: 50
    
-.. |logo-GEOMAR| image:: https://www.geomar.de/typo3conf/ext/geomar_provider/Resources/Public/Images/Geomar-Logo-weiss.svg
+.. |logo-GEOMAR| image:: https://www.geomar.de/fileadmin/content/service/presse/GEOMAR-Logo/geomar_logo_neg_02_kurz.png
    :target: https://www.geomar.de/
    :alt: GEOMAR Helholtz-Centre for ocean research Kiel
-   :height: 40
+   :height: 50
    
 .. |logo-UGent| image:: https://www.ugent.be/++theme++ugent/static/images/logo_ugent_nl.svg
    :target: https://www.ugent.be/nl
    :alt: Ghent University
-   :height: 40
+   :height: 50
    
 .. |image-3D-example| image:: https://media.githubusercontent.com/media/themachinethatgoesping/multibeam-echo-grid-simulator/main/resources/3D-bubblestream.png
    :alt: Example image for a 3D simulation of a bubble stream
