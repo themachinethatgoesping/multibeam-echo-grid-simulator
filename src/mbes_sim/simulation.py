@@ -448,6 +448,77 @@ class Simulation(object):
                              ymin, ymax,
                              zmin, zmax)
 
+    def simulateWCIs(self,
+                                progress: bool=True,
+                                pbar=None,
+                                return_ts: bool=False,
+                                return_sv: bool=True) -> (np.ndarray,np.ndarray):
+        """Simulate the backscatter values for all beams and samples along the survey path over the set targets. (no raytracing)
+
+        Parameters
+        ----------
+        progress : bool, optional
+            show progress bar, by default True
+        pbar : tqdm.tqdm, optional
+            If set: use this progressbar object to plot the progress, by default None
+        return_ts : bool, optional
+            If set: return TS, by default False
+        return_sv : bool, optional
+            If set: return SV, by default True
+
+        Returns
+        -------
+        (np.ndarray,np.ndarray)
+            Vectors of simulated backscatter values for all beams and samples along the survey path
+            - Simulated TS values (if activated)
+            - Simulated SV values (if activated)
+
+        Raises
+        ------
+        RuntimeError
+            If the simulation is not initialized
+        
+        """
+
+        if self.Survey is None: raise RuntimeError("ERROR Simulation: Survey not initialized")
+        if self.Multibeam is None: raise RuntimeError("ERROR Simulation: Multibeam not initialized")
+        if self.Targets is None: raise RuntimeError("ERROR Simulation: Targets not initialized")
+        if self.Targets is None: raise RuntimeError("ERROR Simulation: Targets not initialized")
+
+        if progress:
+            iterator = tqdm(range(len(self.Survey)))
+        else:
+            iterator = range(len(self.Survey))
+
+        if pbar is not None:
+            pbar.reset(total=len(self.Survey))
+
+        TDTS = []
+        TDSV = []
+
+        for pnr in iterator:
+            if pbar is not None:
+                pbar.update()
+
+            # 1: because first is time, then x,y,z,yaw,pitch,roll
+            self.Multibeam.set_navigation(*self.Survey[pnr][1:])
+
+            TS_SV = self.Multibeam.create_wci(*self.Targets.xyzval_vectors(),
+                                               return_ts=return_ts,
+                                               return_sv=return_sv,
+                                               idealized_beampattern=self.UseIdealizedBeampattern)
+            if return_ts and return_sv:
+                TDTS.append(TS_SV[0])
+                TDSV.append(TS_SV[1])
+            else:
+                TDSV.append(TS_SV) # this is either SV or TS depending on the return_ts/return_sv config
+
+        self.Multibeam.set_navigation(0, 0, 0, 0, 0, 0)
+
+        if return_ts and return_sv:
+            return (np.array(TDTS), np.array(TDSV))
+
+        return np.array(TDSV)
 
     def simulate3DEchoesSamples(self,
                                 progress: bool=True,
@@ -464,7 +535,7 @@ class Simulation(object):
         Returns
         -------
         (np.ndarray,np.ndarray,np.ndarray,np.ndarray,np.ndarray)
-            Vectors of simulated backscatter values for all beams and samples allong the survey path
+            Vectors of simulated backscatter values for all beams and samples along the survey path
             - Simulated TS values
             - Simulated SV values
             - raytraced x positions of the samples
@@ -509,6 +580,8 @@ class Simulation(object):
                                                return_sv=True,
                                                idealized_beampattern=self.UseIdealizedBeampattern)
 
+            X, Y, Z = self.Multibeam.raytrace_wci()
+            
             TDTS.append(TS)
             TDSV.append(SV)
             TDX.append(X)
