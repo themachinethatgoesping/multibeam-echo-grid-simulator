@@ -622,29 +622,31 @@ class Multibeam(object):
         if return_ts == return_sv == False:
             raise RuntimeError('Error[create_wci]: neither ts nor sv are selected as return value!')
 
+        targets_x = np.array(targets_x)
+        targets_y = np.array(targets_y)
+        targets_z = np.array(targets_z)
+        targets_val = np.array(targets_val)
+
         # pre filter targets
         def filter_index(x,y,z,v,idx):
-            x_ = x[idx]
-            y_ = y[idx]
-            z_ = z[idx]
-            v_ = v[idx]
+            return x[idx],y[idx],z[idx],v[idx]
 
-            return x_,y_,z_,v_
-
-        # filter targets before computing exact ranges / angles (speed up)
+        #filter targets before computing exact ranges / angles (speed up)
         R = np.max(self.sampleranges)
 
-        idx = np.argwhere(targets_x[targets_x>(self.pos_x-R)]).flatten()
+        idx = np.argwhere(targets_x>(self.pos_x-R)).flatten()
         targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x,targets_y,targets_z,targets_val,idx)
 
-        idx = np.argwhere(targets_x_[targets_x_<(self.pos_x+R)]).flatten()
+        idx = np.argwhere(targets_x_<(self.pos_x+R)).flatten()
         targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
 
-        idx = np.argwhere(targets_y_[targets_y_>(self.pos_y-R)]).flatten()
+        idx = np.argwhere(targets_y_>(self.pos_y-R)).flatten()
         targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
 
-        idx = np.argwhere(targets_y_[targets_y_<(self.pos_y+R)]).flatten()
+        idx = np.argwhere(targets_y_<(self.pos_y+R)).flatten()
         targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
+
+        print(R,self.pos_x,self.pos_y,len(targets_x_),len(targets_x),"                      ",end='\r')
 
         # compute position relative to the ship
         targets_range, targets_tx, targets_rx = self.get_target_range_tx_rx(targets_x_,
@@ -659,7 +661,7 @@ class Multibeam(object):
                                self.beampattern_beam_rx,
                                pf.get_hann_pulse_response, self.effective_pulse_length)
         else:
-            ts = ef.create_wci(targets_range, targets_tx, targets_rx, np.array(targets_val_),
+            ts = ef.create_wci(targets_range, targets_tx, targets_rx, np.array(targets_val),
                                self.beamsteeringangles_radians,
                                self.sampleranges,
                                self.beampattern_idealized_tx,
