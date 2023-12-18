@@ -128,7 +128,7 @@ def grid_wci(
     gridder : gf.GRIDDER
         gridder object corresponding to imagesums and imagenums
     multibeam : mb.Multibeam
-        Multibeam object containing the simulation parametesr (e.g. beam angles, pulse length, current position, etc.)
+        Multibeam object containing the simulation parameters (e.g. beam angles, pulse length, current position, etc.)
     ECHO : np.ndarray
         2D array of echo values (WCI / TS), used for TS gridding
     TDSV : np.ndarray
