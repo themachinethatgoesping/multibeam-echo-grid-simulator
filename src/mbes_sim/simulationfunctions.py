@@ -1019,13 +1019,13 @@ class SimulationSetup(object):
         if blockAvg:
             simulation.setMethods(
                 [
-                    SIM.GriddingMethod.sv,
-                    SIM.GriddingMethod.sv_int_lin
+                    SIM.GriddingMethod.block_mean,
+                    SIM.GriddingMethod.weighted_mean
                 ])
         else:
             simulation.setMethods(
                 [
-                    SIM.GriddingMethod.sv_int_lin,
+                    SIM.GriddingMethod.weighted_mean,
                 ])
 
         return simulation
