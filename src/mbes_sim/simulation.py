@@ -59,9 +59,8 @@ class GriddingMethod(IntEnum):
     """Enum class for gridding methods.     
     """
 
-    ts = 0, # block mean of ts, for testing only
-    sv = 1, # block mean of sv
-    sv_int_lin = 2, # weighted mean of sv
+    block_mean = 1, # block mean of sv
+    weighted_mean = 2, # weighted mean of sv
     
     # block mean of different variables. For test/plotting only
     pingpos_x = 8,
@@ -81,9 +80,8 @@ class GriddingMethod(IntEnum):
         str
             The string representation of the enum value.
         """
-        if self.value == GriddingMethod.ts: return 'ts' # block mean of ts, for testing only
-        if self.value == GriddingMethod.sv: return 'sv' # block mean of sv
-        if self.value == GriddingMethod.sv_int_lin: return 'sv_int_lin' # weighted mean of sv
+        if self.value == GriddingMethod.block_mean: return 'sv' # block mean of sv
+        if self.value == GriddingMethod.weighted_mean: return 'weighted_mean' # weighted mean of sv
 
         # block mean of different variables. For test/plotting only
         if self.value == GriddingMethod.pingpos_x: return 'pingpos_x'
@@ -112,7 +110,7 @@ def grid_wci(
         imagesnums: dict,
         gridder: gf.GRIDDER,
         multibeam: mb.Multibeam,
-        ECHO: np.ndarray, TDSV: np.ndarray,
+        TDVals: np.ndarray,
         TDX: np.ndarray, TDY: np.ndarray, TDZ: np.ndarray,
 ) -> (dict, dict):
     """Grids the data using the given methods.
@@ -129,10 +127,8 @@ def grid_wci(
         gridder object corresponding to imagesums and imagenums
     multibeam : mb.Multibeam
         Multibeam object containing the simulation parameters (e.g. beam angles, pulse length, current position, etc.)
-    ECHO : np.ndarray
-        2D array of echo values (WCI / TS), used for TS gridding
-    TDSV : np.ndarray
-        2D array of echo values (WCI / SV), used for SV gridding
+    TDVals : np.ndarray
+        2D array of echo values (typically SV), used for gridding
     TDX : np.ndarray
         2D array of x coordinates (result from WCI raytracing)
     TDY : np.ndarray
@@ -153,8 +149,7 @@ def grid_wci(
         Aaaaaaah! if the given method is not implemented.
     """
 
-    bval = ECHO.flatten()
-    bsv = TDSV.flatten()
+    bvals = TDVals.flatten()
     x = TDX.flatten()
     y = TDY.flatten()
     z = TDZ.flatten()
@@ -167,7 +162,7 @@ def grid_wci(
             imagesum = None
             imagenum = None
 
-        tmp = np.empty(bval.shape)
+        tmp = np.empty(bvals.shape)
         if method == GriddingMethod.pingpos_x:
             tmp.fill(pingpositions_x[pnr])
             imagesum, imagenum = gridder.append_sampled_image(x, y, z, tmp, imagesum=imagesum, imagenum=imagenum,
@@ -201,15 +196,12 @@ def grid_wci(
             imagesum, imagenum = gridder.append_sampled_image(x, y, z, tmp, imagesum=imagesum, imagenum=imagenum,
                                                               skip_invalid=True)
 
-        elif method == GriddingMethod.ts:
-            imagesum, imagenum = gridder.append_sampled_image(x, y, z, bval, imagesum=imagesum, imagenum=imagenum,
-                                                              skip_invalid=True)
-        elif method == GriddingMethod.sv:
-            imagesum, imagenum = gridder.append_sampled_image(x, y, z, bsv, imagesum=imagesum, imagenum=imagenum,
+        elif method == GriddingMethod.block_mean:
+            imagesum, imagenum = gridder.append_sampled_image(x, y, z, bvals, imagesum=imagesum, imagenum=imagenum,
                                                               skip_invalid=True)
 
-        elif method == GriddingMethod.sv_int_lin:
-            imagesum, imagenum = gridder.append_sampled_image2(x, y, z, bsv,
+        elif method == GriddingMethod.weighted_mean:
+            imagesum, imagenum = gridder.append_sampled_image2(x, y, z, bvals,
                                                                imagesum=imagesum,
                                                                imagenum=imagenum,
                                                                skip_invalid=True)
@@ -449,22 +441,19 @@ class Simulation(object):
                              zmin, zmax)
 
     def simulateWCIs(self,
-                                progress: bool=True,
-                                pbar=None,
-                                return_ts: bool=False,
-                                return_sv: bool=True) -> (np.ndarray,np.ndarray):
+                     return_ts: bool=False,
+                     progress: bool=True,
+                     pbar=None) -> (np.ndarray,np.ndarray):
         """Simulate the backscatter values for all beams and samples along the survey path over the set targets. (no raytracing)
 
         Parameters
         ----------
+        return_ts : bool, optional
+            If set: return TS, else return SV, by default False (SV)
         progress : bool, optional
             show progress bar, by default True
         pbar : tqdm.tqdm, optional
             If set: use this progressbar object to plot the progress, by default None
-        return_ts : bool, optional
-            If set: return TS, by default False
-        return_sv : bool, optional
-            If set: return SV, by default True
 
         Returns
         -------
@@ -493,8 +482,7 @@ class Simulation(object):
         if pbar is not None:
             pbar.reset(total=len(self.Survey))
 
-        TDTS = []
-        TDSV = []
+        TDVals = []
 
         for pnr in iterator:
             if pbar is not None:
@@ -503,30 +491,26 @@ class Simulation(object):
             # 1: because first is time, then x,y,z,yaw,pitch,roll
             self.Multibeam.set_navigation(*self.Survey[pnr][1:])
 
-            TS_SV = self.Multibeam.create_wci(*self.Targets.xyzval_vectors(),
-                                               return_ts=return_ts,
-                                               return_sv=return_sv,
-                                               idealized_beampattern=self.UseIdealizedBeampattern)
-            if return_ts and return_sv:
-                TDTS.append(TS_SV[0])
-                TDSV.append(TS_SV[1])
-            else:
-                TDSV.append(TS_SV) # this is either SV or TS depending on the return_ts/return_sv config
-
+            TDVals.append(self.Multibeam.create_wci(
+                *self.Targets.xyzval_vectors(),
+                return_ts=return_ts,
+                idealized_beampattern=self.UseIdealizedBeampattern
+                ))
+          
         self.Multibeam.set_navigation(0, 0, 0, 0, 0, 0)
 
-        if return_ts and return_sv:
-            return (np.array(TDTS), np.array(TDSV))
-
-        return np.array(TDSV)
+        return np.array(TDVals)
 
     def simulate3DEchoesSamples(self,
+                                return_ts: bool=False,
                                 progress: bool=True,
                                 pbar=None) -> (np.ndarray,np.ndarray,np.ndarray,np.ndarray,np.ndarray):
         """Simulate and raytrace the backscatter values for all beams and samples along the survey path over the set targets.
 
         Parameters
         ----------
+        return_ts : bool, optional
+            If set: return TS, else return SV, by default False (SV)
         progress : bool, optional
             show progress bar, by default True
         pbar : tqdm.tqdm, optional
@@ -562,8 +546,7 @@ class Simulation(object):
         if pbar is not None:
             pbar.reset(total=len(self.Survey))
 
-        TDTS = []
-        TDSV = []
+        TDVals = []
         TDX = []
         TDY = []
         TDZ = []
@@ -575,31 +558,31 @@ class Simulation(object):
             # 1: because first is time, then x,y,z,yaw,pitch,roll
             self.Multibeam.set_navigation(*self.Survey[pnr][1:])
 
-            TS, SV = self.Multibeam.create_wci(*self.Targets.xyzval_vectors(),
-                                               return_ts=True,
-                                               return_sv=True,
-                                               idealized_beampattern=self.UseIdealizedBeampattern)
+            Vals = self.Multibeam.create_wci(
+                *self.Targets.xyzval_vectors(),
+                return_ts=return_ts,
+                idealized_beampattern=self.UseIdealizedBeampattern
+                )
 
             X, Y, Z = self.Multibeam.raytrace_wci()
             
-            TDTS.append(TS)
-            TDSV.append(SV)
+            TDVals.append(Vals)
             TDX.append(X)
             TDY.append(Y)
             TDZ.append(Z)
 
-        TDTS = np.array(TDTS)
-        TDSV = np.array(TDSV)
+        TDVals = np.array(TDTS)
         TDX = np.array(TDX)
         TDY = np.array(TDY)
         TDZ = np.array(TDZ)
 
         self.Multibeam.set_navigation(0, 0, 0, 0, 0, 0)
 
-        return TDTS, TDSV, TDX, TDY, TDZ
+        return TDVals, TDX, TDY, TDZ
 
 
     def simulate3DEchoesGrid(self,
+                       return_ts: bool=False,
                        progress: bool=False,
                        pbar=None,
                        progress_position: int = 1,
@@ -609,6 +592,8 @@ class Simulation(object):
 
         Parameters
         ----------
+        return_ts : bool, optional
+            If set: return TS, else return SV, by default False (SV)
         progress : bool, optional
             show progress bar, by default True
         pbar : tqdm.tqdm, optional
@@ -654,19 +639,18 @@ class Simulation(object):
             # 1: because first is time, then x,y,z,yaw,pitch,roll
             self.Multibeam.set_navigation(*self.Survey[pnr][1:])
 
-            TS, SV = self.Multibeam.create_wci(*self.Targets.xyzval_vectors(),
-                                          return_ts=True,
-                                          return_sv=True,
+            Vals = self.Multibeam.create_wci(*self.Targets.xyzval_vectors(),
+                                          return_ts=return_ts,
                                           idealized_beampattern=self.UseIdealizedBeampattern)
 
             X, Y, Z = self.Multibeam.raytrace_wci()
 
             if min_sv is not None:
-                X  = X[SV > min_sv]
-                Y  = Y[SV > min_sv]
-                Z  = Z[SV > min_sv]
-                TS = TS[SV > min_sv]
-                SV = SV[SV > min_sv]
+                args = np.argwhere(Vals > min_sv)
+                Vals = Vals[args]
+                X = X[args]
+                Y = Y[args]
+                Z = Z[args]
 
             imagessums, imagesnums = grid_wci(
                 self.Methods,
@@ -674,7 +658,7 @@ class Simulation(object):
                 imagesnums,
                 gridder,
                 self.Multibeam,
-                TS, SV,
+                Vals,
                 X, Y, Z
             )
 
