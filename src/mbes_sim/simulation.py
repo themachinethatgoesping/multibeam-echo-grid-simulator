@@ -602,7 +602,6 @@ class Simulation(object):
     def simulate3DEchoesGrid(self,
                        progress: bool=False,
                        pbar=None,
-                       return_scatterGrids: bool = True,
                        progress_position: int = 1,
                        min_sv: float=None) -> sg.ScatterGridDict:
         """Simulate, raytrace and grid the backscatter values for all beams and samples along the survey path over the set targets.
