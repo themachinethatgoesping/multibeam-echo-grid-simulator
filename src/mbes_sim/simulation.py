@@ -571,7 +571,7 @@ class Simulation(object):
             TDY.append(Y)
             TDZ.append(Z)
 
-        TDVals = np.array(TDTS)
+        TDVals = np.array(TDVals)
         TDX = np.array(TDX)
         TDY = np.array(TDY)
         TDZ = np.array(TDZ)
