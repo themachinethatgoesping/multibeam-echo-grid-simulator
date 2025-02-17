@@ -101,7 +101,8 @@ def open_file(file, verbose=True, cache = False, no_plots=True, hdf5=True):
 
     #print('in file', file)
     if no_plots:
-        filepath,filename = os.path.split(file)
+        filename = file.split('/')[-1]
+        filepath = '/'.join(file.split('/')[:-1])
         if not filename.startswith('noplots_'):
             plt_filename = deepcopy(filename)
             filename = 'noplots_' + filename

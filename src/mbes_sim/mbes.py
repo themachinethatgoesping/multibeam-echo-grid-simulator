@@ -587,7 +587,6 @@ class Multibeam(object):
                    targets_z: np.ndarray,
                    targets_val: np.ndarray,
                    return_ts : bool = False,
-                   return_sv : bool = True,
                    idealized_beampattern: bool = False)-> np.ndarray:
         """Create a Water Column Image (wci) for the given targets
 
@@ -602,9 +601,7 @@ class Multibeam(object):
         targets_val : np.ndarray
             Backscattering values for the targets (linear scale)
         return_ts : bool, optional
-            If true: return the target strength value, by default False
-        return_sv : bool, optional
-            If true: return the volume backscattering strength value , by default True
+            If true: return the target strength value instead of volume scattering strength, by default False
         idealized_beampattern : bool, optional
             Use idealized beampattern instead of the real ones, by default False
 
@@ -619,16 +616,39 @@ class Multibeam(object):
             Error if neither return_ts nor return_sv is set to true
         """
 
-        if return_ts == return_sv == False:
-            raise RuntimeError('Error[create_wci]: neither ts nor sv are selected as return value!')
+        targets_x = np.array(targets_x)
+        targets_y = np.array(targets_y)
+        targets_z = np.array(targets_z)
+        targets_val = np.array(targets_val)
+
+        # pre filter targets
+        def filter_index(x,y,z,v,idx):
+            return x[idx],y[idx],z[idx],v[idx]
+
+        #filter targets before computing exact ranges / angles (speed up)
+        R = np.max(self.sampleranges)
+
+        idx = np.argwhere(targets_x>(self.pos_x-R)).flatten()
+        targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x,targets_y,targets_z,targets_val,idx)
+
+        idx = np.argwhere(targets_x_<(self.pos_x+R)).flatten()
+        targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
+
+        idx = np.argwhere(targets_y_>(self.pos_y-R)).flatten()
+        targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
+
+        idx = np.argwhere(targets_y_<(self.pos_y+R)).flatten()
+        targets_x_,targets_y_,targets_z_,targets_val_ = filter_index(targets_x_,targets_y_,targets_z_,targets_val_,idx)
+
+        print(R,self.pos_x,self.pos_y,len(targets_x_),len(targets_x),"                      ",end='\r')
 
         # compute position relative to the ship
-        targets_range, targets_tx, targets_rx = self.get_target_range_tx_rx(targets_x,
-                                                                            targets_y,
-                                                                            targets_z)
+        targets_range, targets_tx, targets_rx = self.get_target_range_tx_rx(targets_x_,
+                                                                            targets_y_,
+                                                                            targets_z_)
 
         if not idealized_beampattern:
-            ts = ef.create_wci(targets_range, targets_tx, targets_rx, np.array(targets_val),
+            ts = ef.create_wci(targets_range, targets_tx, targets_rx, np.array(targets_val_),
                                self.beamsteeringangles_radians,
                                self.sampleranges,
                                self.beampattern_tx,
@@ -642,15 +662,10 @@ class Multibeam(object):
                                self.beampattern_idealized_beam_rx,
                                pf.get_rect_pulse_response, self.effective_pulse_length)
 
-        if return_sv:
-            sv = ts / self.wci_sample_volume
+        if not return_ts:
+            return ts / self.wci_sample_volume
 
-            if return_ts:
-                return ts,sv
-            return sv
-
-        if return_ts:
-            return ts
+        return ts
 
     def raytrace_wci(self) -> (np.ndarray,np.ndarray,np.ndarray):
         """Return the x,y,z coordinates of the wci in the absolute coordinate system.
@@ -701,21 +716,20 @@ if __name__ == '__main__':
 
     tr,ttx,trx = mbes.get_target_range_tx_rx(tx,ty,tz)
 
-    ts,sv = mbes.create_wci(tx,ty,tz,tv,return_ts=True,return_sv=True)
+    sv = mbes.create_wci(tx,ty,tz,tv,return_ts=False)
 
     fig = plt.figure('echo')
     fig.clear()
     fig.show()
 
-    ts_db = hlp.to_db(ts)
     sv_db = hlp.to_db(sv)
 
     axes = fig.subplots(ncols=2)
     axit = axes.flat
 
     ax = next(axit)
-    ax.set_title('ts')
-    ax.imshow(ts.transpose(), extent=mbes.get_wci_extent())
+    ax.set_title('sv')
+    ax.imshow(sv.transpose(), extent=mbes.get_wci_extent())
     ax.scatter(trx, tr)
     windows_names_pltbp_pltideal = [
         (signal.windows.boxcar(128), 'boxcar', True, True),

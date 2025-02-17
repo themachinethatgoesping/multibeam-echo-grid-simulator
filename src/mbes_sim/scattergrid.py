@@ -30,7 +30,7 @@ import warnings
 
 """Functions and classes for creating scatter grids from simulated data.
 
-Scattergrids use the grid classes defined in gridfunctions.py and add convinience functions for averaging, integrating and plotting.
+Scattergrids use the grid classes defined in gridfunctions.py and add convenience functions for averaging, integrating and plotting.
 """
 
 @njit
@@ -78,7 +78,7 @@ def static_get_target_pos(image: np.ndarray, min_val: float = np.nan) -> (float,
 
 
 class ScatterGrid(object):
-    """Class for creating and handling scatter grids. This class uses the grid classes defined in gridfunctions.py and adds convinience functions for averaging, integrating and plotting.
+    """Class for creating and handling scatter grids. This class uses the grid classes defined in gridfunctions.py and adds convenience functions for averaging, integrating and plotting.
     """
 
     def __init__(self, imagesums: np.ndarray, imagenums: np.ndarray, gridder: gf.GRIDDER):
@@ -536,7 +536,7 @@ class ScatterGrid(object):
 
 
 class ScatterGridDict(MutableMapping):
-    """A dictionary that stores ScatterGrid objects. Adds convinience functions for printing and cutting layers.
+    """A dictionary that stores ScatterGrid objects. Adds convenience functions for printing and cutting layers.
     """
 
     def print(self, TrueValue: float):

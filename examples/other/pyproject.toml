@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "tutorial"
+version = "0.1.0"
+description = ""
+authors = ["Peter Urban <peter.urban@ugent.be>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.11, <3.13"
+themachinethatgoesping = "0.28.1"
+matplotlib = "3.10.0"
+jupyterlab = "4.3.4"
+ipympl = "0.9.6"
+nbmake = "^1.5.4"
+numba = "^0.60" #setting this here makes sure that e.g. numpy version is set compatible by poetry
+jupyterlab-execute-time = "^3.2.0"
+pyvista = {extras = ["all"], version = "^0.44.2"}
+scipy = "^1.15.2"
+pandas = "^2.2.3"
+tables = "^3.10.2"
+pillow = "^11.1.0"
+widgetsnbextension = "^4.0.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
